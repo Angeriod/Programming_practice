@@ -12,6 +12,4 @@ while(True):
     while(idx>=N):
         idx-=N
 
-print("<", end='')
-print(', '.join(map(str,order)), end='')
-print(">")
+print('<',end=''),print(*order,sep=', ',end=''),print('>')
