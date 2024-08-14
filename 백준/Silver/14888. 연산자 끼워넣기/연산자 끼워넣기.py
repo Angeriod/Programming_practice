@@ -1,44 +1,40 @@
-N = int(input())
+import sys
 
-lst = list(map(int, input().split()))
-
-operators = list(map(int, input().split()))
+N= int(sys.stdin.readline())
+A_list = list(map(int,sys.stdin.readline().split()))
+otr = list(map(int,sys.stdin.readline().split()))
 
 mx = -1e9
 mn = 1e9
 
+def dfs(depth,total):
+    global mx,mn
 
-def dfs(n, temp):
-    global mx, mn
-
-    # 종료 조건
-    if n == N - 1:
-        mx = max(temp, mx)
-        mn = min(temp, mn)
+    if depth == N-1:
+        mx = max(total,mx)
+        mn = min(total,mn)
         return
 
-    # 하부함수 호출
-    if operators[0] != 0:  
-        operators[0] -= 1
-        dfs(n + 1, temp + lst[n + 1])
-        operators[0] += 1
+    if otr[0] != 0:
+        otr[0] -= 1
+        dfs(depth + 1, total + A_list[depth+1] )
+        otr[0] += 1
 
-    if operators[1] != 0:  
-        operators[1] -= 1
-        dfs(n + 1, temp - lst[n + 1])
-        operators[1] += 1
+    if otr[1] != 0:
+        otr[1] -= 1
+        dfs(depth + 1, total - A_list[depth+1])
+        otr[1] += 1
 
-    if operators[2] != 0: 
-        operators[2] -= 1
-        dfs(n + 1, temp * lst[n + 1])
-        operators[2] += 1
+    if otr[2] != 0:
+        otr[2] -= 1
+        dfs(depth + 1, total * A_list[depth+1])
+        otr[2] += 1
 
-    if operators[3] != 0:  
-        operators[3] -= 1
-        dfs(n + 1, int(temp / lst[n + 1]))
-        operators[3] += 1
+    if otr[3] != 0:
+        otr[3] -= 1
+        dfs(depth + 1, int(total / A_list[depth+1]))
+        otr[3] += 1
 
-
-dfs(0, lst[0])
+dfs(0, A_list[0])
 print(mx)
 print(mn)
