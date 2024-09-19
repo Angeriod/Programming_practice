@@ -1,25 +1,34 @@
 import sys
-import heapq
+sys.setrecursionlimit(10**6)  # 재귀 깊이를 늘려 스택 오버플로우 방지
 
-V,E = map(int,sys.stdin.readline().split())
-graph = [[] for i in range(V+1)]
-visited = [False]*(V+1)
-heap = [[0,1]]
+V, E = map(int, sys.stdin.readline().split())
+graph = []
 for i in range(E):
-    a,b,c, = map(int,sys.stdin.readline().split())
-    graph[a].append((c,b))
-    graph[b].append((c,a))
+    a, b, c = map(int, sys.stdin.readline().split())
+    graph.append((a, b, c))
+
+graph.sort(key=lambda x: x[2])
+
+parent = [i for i in range(V + 1)]
+
+def get_parent(x):
+    if parent[x] == x:
+        return x
+    parent[x] = get_parent(parent[x])
+    return parent[x]
+
+def union_parent(a, b):
+    a = get_parent(a)
+    b = get_parent(b)
+
+    if a < b:
+        parent[b] = a
+    else:
+        parent[a] = b
 
 answer = 0
-while heap:
-
-    cur_cost,cur_node = heapq.heappop(heap)
-    if not visited[cur_node]:
-        visited[cur_node] = True
-        answer += cur_cost
-
-        for i in graph[cur_node]:
-            heapq.heappush(heap,i)
-
-
+for a, b, cost in graph:
+    if get_parent(a) != get_parent(b):
+        union_parent(a, b)
+        answer += cost  # 간선의 가중치를 더해야 함
 print(answer)
